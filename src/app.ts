@@ -7,7 +7,10 @@ if( !botao) {
 
 const botoesCategoria = document.querySelectorAll(".categorias");
 const inputDescricao = document.querySelector<HTMLInputElement>("#descricao");
-if (!)
+if (!inputDescricao) {
+  throw new Error ("Input Descrição não encontrado") // aqui também tenho de colocar o throw new error e tudo mais. 
+}; 
+
 
 
 import {

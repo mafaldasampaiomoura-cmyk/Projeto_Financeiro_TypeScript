@@ -1,6 +1,11 @@
 import { transactions, removeTransaction } from "../transactions/transactions.js"; // escrevo js porque ele depois faz a compilação para o Ts. Quando compilar passa a haver o .js 
 import { getTotalDespesas, getTotalReceitas, getSaldo } from "../calculations/calculations.js";
 const listaTransacao = document.querySelector(".lista-transacoes");
+if (!listaTransacao) {
+    throw new Error("Elemento Lista de Transação Não encontrada");
+}
+;
+const listaTransacaoElemento = listaTransacao;
 export function renderTransactions() {
     let novaTransacao = ''; //acumular uma string no HTML. Esta variável é a mesma que tem de estar no forEach 
     transactions.forEach((t) => {
@@ -16,12 +21,23 @@ export function renderTransactions() {
 
         </div>`;
     });
-    listaTransacao.innerHTML = novaTransacao; //meter a lista dentro do meu container 
+    listaTransacaoElemento.innerHTML = novaTransacao; //meter a lista dentro do meu container 
 }
 export function atualizacaoCards(lista = transactions) {
     const saldoValor = document.querySelector("#saldoValor"); //vou buscar ao documento do index onde é que estão os cards. 
+    if (!saldoValor) {
+        throw new Error("Elemento #saldoValor não encontrado");
+    }
+    ;
     const receitasValor = document.querySelector("#receitasValor");
+    if (!receitasValor) {
+        throw new Error("Elementos #receitasValor não encontrado");
+    }
     const despesasValor = document.querySelector("#despesasValor");
+    if (!despesasValor) {
+        throw new Error("Elementos #despesasValor não encontrado");
+    }
+    ;
     const saldo = getSaldo(lista); //chamo as funções que vou precisar de trabalhar para fazer que ele pegue nas funções que eu fiz. 
     const receita = getTotalReceitas(lista);
     const despesa = getTotalDespesas(lista);
@@ -30,11 +46,17 @@ export function atualizacaoCards(lista = transactions) {
     despesasValor.textContent = formatacaoEuro(despesa);
 }
 listaTransacao.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-remover");
+    const target = e.target;
+    if (!(target instanceof Element))
+        return; //TS se o target não for um Elemento, sai return 
+    // se não cliquei no btn removar, btn sai null, se clicar, o btn é elemento certo por isso posso continuar 
+    const btn = target.closest(".btn-remover"); //TS neste caso, o Event Target está muito genérico, por isso, temos de confirmar que o target é um Element. 
     if (!btn) {
         return;
     }
     const linha = btn.closest(".item-transacao");
+    if (!linha)
+        return;
     const id = Number(linha.dataset.id);
     removeTransaction(id);
     renderTransactions();

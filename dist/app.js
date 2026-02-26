@@ -6,6 +6,10 @@ if (!botao) {
 // caso seja para logo com erro. 
 const botoesCategoria = document.querySelectorAll(".categorias");
 const inputDescricao = document.querySelector("#descricao");
+if (!inputDescricao) {
+    throw new Error("Input Descrição não encontrado"); // aqui também tenho de colocar o throw new error e tudo mais. 
+}
+;
 import { 
 //transactions,
 carregarTransactions, 
